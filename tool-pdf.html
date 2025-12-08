@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Offline PDF to PDF Tool</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: #0f172a;
+      color: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .app {
+      width: 100%;
+      max-width: 900px;
+      margin: 16px;
+      background: rgba(15,23,42,0.95);
+      border-radius: 16px;
+      padding: 24px 20px 28px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+      border: 1px solid rgba(148,163,184,0.4);
+    }
+    .title {
+      font-size: 1.6rem;
+      margin: 0 0 4px;
+      text-align: center;
+    }
+    .subtitle {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #9ca3af;
+      margin-bottom: 20px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      font-size: 0.7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(96,165,250,0.8);
+      color: #bfdbfe;
+      margin-left: 8px;
+    }
+    .section {
+      border-radius: 12px;
+      padding: 16px 14px;
+      margin-bottom: 18px;
+      background: radial-gradient(circle at top left, rgba(56,189,248,0.15), transparent 60%),
+                  radial-gradient(circle at bottom right, rgba(129,140,248,0.12), transparent 55%),
+                  rgba(15,23,42,0.9);
+      border: 1px solid rgba(75,85,99,0.7);
+    }
+    .section-title {
+      font-size: 1rem;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .section-title span.icon {
+      font-size: 1.1rem;
+    }
+
+    .file-input-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+    input[type="file"] {
+      flex: 1;
+      background: #020617;
+      color: #e5e7eb;
+      border-radius: 8px;
+      padding: 6px;
+      border: 1px solid rgba(75,85,99,0.9);
+      font-size: 0.9rem;
+    }
+    input[type="file"]::file-selector-button {
+      background: #1d4ed8;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      margin-right: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    button {
+      border: none;
+      cursor: pointer;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+    }
+    button:active {
+      transform: scale(0.97);
+      box-shadow: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #2563eb, #22c55e);
+      color: white;
+      box-shadow: 0 10px 25px rgba(37,99,235,0.4);
+    }
+    .btn-secondary {
+      background: rgba(15,23,42,0.9);
+      color: #e5e7eb;
+      border: 1px solid rgba(148,163,184,0.7);
+    }
+    .btn-small {
+      padding: 6px 10px;
+      font-size: 0.8rem;
+    }
+
+    .info {
+      font-size: 0.85rem;
+      color: #9ca3af;
+      margin-top: 10px;
+      line-height: 1.5;
+    }
+    .file-list {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      color: #e5e7eb;
+    }
+    .file-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.8);
+      margin: 2px 4px 0 0;
+      max-width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 0.8rem;
+    }
+
+    .flex {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .flex-1 {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .input-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      color: #d1d5db;
+      margin-top: 8px;
+    }
+    .input-group label {
+      white-space: nowrap;
+    }
+    .input-group input[type="number"] {
+      width: 80px;
+      padding: 4px 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(55,65,81,0.9);
+      background: #020617;
+      color: #e5e7eb;
+      font-size: 0.85rem;
+    }
+
+    .status {
+      margin-top: 10px;
+      font-size: 0.85rem;
+      min-height: 1.2em;
+    }
+    .status.ok {
+      color: #4ade80;
+    }
+    .status.error {
+      color: #f97373;
+    }
+    .status.loading::after {
+      content: "…";
+      animation: dots 1s infinite linear;
+    }
+
+    @keyframes dots {
+      0% { content: "…"; }
+      33% { content: ".  "; }
+      66% { content: ".. "; }
+      100% { content: "…"; }
+    }
+
+    @media (max-width: 640px) {
+      .app {
+        padding: 18px 14px 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1 class="title">
+      PDF to PDF Tool
+      <span class="badge">Offline - Local Only</span>
+    </h1>
+    <p class="subtitle">Gộp và tách PDF ngay trong trình duyệt, không upload lên server.</p>
+
+    <!-- KHU VỰC CHỌN FILE -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">📂</span>
+        <span>Chọn file PDF</span>
+      </div>
+      <div class="file-input-row">
+        <input type="file" id="fileInput" accept="application/pdf" multiple />
+        <button id="clearFilesBtn" class="btn-secondary btn-small">Xoá danh sách</button>
+      </div>
+      <div id="fileList" class="file-list">
+        Chưa chọn file nào.
+      </div>
+      <p class="info">
+        • Có thể chọn 1 hoặc nhiều PDF.<br />
+        • Dữ liệu xử lý hoàn toàn trên máy bạn (client-side).
+      </p>
+    </div>
+
+    <!-- GỘP PDF -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">➕</span>
+        <span>Gộp nhiều PDF thành 1 file</span>
+      </div>
+      <div class="flex">
+        <div class="flex-1">
+          <p class="info">
+            Thứ tự gộp theo đúng thứ tự trong hộp thoại chọn file.
+            Nếu muốn đổi thứ tự, hãy chọn lại file theo thứ tự mong muốn.
+          </p>
+        </div>
+        <button id="mergeBtn" class="btn-primary">
+          <span>Gộp PDF</span> <span>📑</span>
+        </button>
+      </div>
+      <div id="mergeStatus" class="status"></div>
+    </div>
+
+    <!-- TÁCH PDF -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">✂️</span>
+        <span>Tách trang từ 1 PDF</span>
+      </div>
+      <p class="info">
+        Chọn 1 file PDF ở trên, nhập khoảng trang cần tách (ví dụ: từ trang 3 đến trang 10).
+      </p>
+      <div class="input-group">
+        <label for="fromPage">Từ trang</label>
+        <input type="number" id="fromPage" min="1" value="1" />
+        <label for="toPage">Đến trang</label>
+        <input type="number" id="toPage" min="1" value="1" />
+        <button id="extractBtn" class="btn-secondary">
+          <span>Tách trang</span> <span>📄</span>
+        </button>
+      </div>
+      <div id="extractStatus" class="status"></div>
+    </div>
+
+    <!-- CHÂN TRANG -->
+    <p class="info" style="text-align:center;margin-top:8px;">
+      Gợi ý: lưu file HTML này và <code>pdf-lib.min.js</code> trong cùng thư mục để sử dụng hoàn toàn offline.
+    </p>
+  </div>
+
+  <!-- THƯ VIỆN PDF-LIB (ĐẶT FILE pdf-lib.min.js CÙNG THƯ MỤC) -->
+  <script src="pdf-lib.min.js"></script>
+  <script>
+    // Lấy class PDFDocument từ thư viện PDFLib
+    const { PDFDocument } = PDFLib;
+
+    const fileInput = document.getElementById("fileInput");
+    const fileListEl = document.getElementById("fileList");
+    const clearFilesBtn = document.getElementById("clearFilesBtn");
+
+    const mergeBtn = document.getElementById("mergeBtn");
+    const mergeStatus = document.getElementById("mergeStatus");
+
+    const fromPageInput = document.getElementById("fromPage");
+    const toPageInput = document.getElementById("toPage");
+    const extractBtn = document.getElementById("extractBtn");
+    const extractStatus = document.getElementById("extractStatus");
+
+    let selectedFiles = [];
+
+    // Hiển thị danh sách file
+    function renderFileList() {
+      if (!selectedFiles || selectedFiles.length === 0) {
+        fileListEl.textContent = "Chưa chọn file nào.";
+        return;
+      }
+      fileListEl.innerHTML = "";
+      selectedFiles.forEach((f, idx) => {
+        const pill = document.createElement("div");
+        pill.className = "file-pill";
+        pill.textContent = (idx + 1) + ". " + f.name;
+        fileListEl.appendChild(pill);
+      });
+    }
+
+    fileInput.addEventListener("change", (e) => {
+  let files = Array.from(e.target.files || []);
+
+  // Lọc PDF
+  files = files.filter(f => f.type === "application/pdf");
+
+  // Sắp xếp theo số trang trong tên file
+  files.sort((a, b) => {
+    // Tìm số trong tên file
+    const numA = parseInt(a.name.match(/\d+/));
+    const numB = parseInt(b.name.match(/\d+/));
+
+    // Nếu không tìm được số → để cuối
+    if (isNaN(numA)) return 1;
+    if (isNaN(numB)) return -1;
+
+    return numA - numB;
+  });
+
+  selectedFiles = files;
+  renderFileList();
+});
+
+
+    clearFilesBtn.addEventListener("click", () => {
+      selectedFiles = [];
+      fileInput.value = "";
+      renderFileList();
+      mergeStatus.textContent = "";
+      mergeStatus.className = "status";
+      extractStatus.textContent = "";
+      extractStatus.className = "status";
+    });
+
+    // Hàm tiện ích: đọc file thành ArrayBuffer
+    function readFileAsArrayBuffer(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (err) => reject(err);
+        reader.readAsArrayBuffer(file);
+      });
+    }
+
+    // Hàm tiện ích: tải file xuống
+    function downloadBytes(bytes, filename) {
+      const blob = new Blob([bytes], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    // GỘP PDF
+    mergeBtn.addEventListener("click", async () => {
+      mergeStatus.className = "status";
+      mergeStatus.textContent = "";
+
+      if (!selectedFiles || selectedFiles.length === 0) {
+        mergeStatus.textContent = "⚠️ Vui lòng chọn ít nhất 1 file PDF.";
+        mergeStatus.classList.add("error");
+        return;
+      }
+      if (selectedFiles.length === 1) {
+        mergeStatus.textContent = "⚠️ Đang chỉ có 1 file. Vẫn có thể gộp (kết quả giống file gốc).";
+        mergeStatus.classList.add("error");
+        return;
+      }
+
+      try {
+        mergeStatus.textContent = "⏳ Đang gộp PDF, vui lòng chờ";
+        mergeStatus.classList.add("loading");
+
+        const mergedPdf = await PDFDocument.create();
+
+        for (let i = 0; i < selectedFiles.length; i++) {
+          const file = selectedFiles[i];
+          const arrayBuffer = await readFileAsArrayBuffer(file);
+          const tempPdf = await PDFDocument.load(arrayBuffer);
+          const copiedPages = await mergedPdf.copyPages(
+            tempPdf,
+            tempPdf.getPageIndices()
+          );
+          copiedPages.forEach((p) => mergedPdf.addPage(p));
+        }
+
+        const mergedBytes = await mergedPdf.save();
+        const outName = "merged_" + (selectedFiles[0].name.replace(/\.pdf$/i, "")) + ".pdf";
+        downloadBytes(mergedBytes, outName);
+
+        mergeStatus.className = "status ok";
+        mergeStatus.textContent = "✅ Gộp PDF thành công! File đã được tải xuống: " + outName;
+      } catch (err) {
+        console.error(err);
+        mergeStatus.className = "status error";
+        mergeStatus.textContent = "❌ Lỗi khi gộp PDF: " + (err.message || err);
+      }
+    });
+
+    // TÁCH TRANG
+    extractBtn.addEventListener("click", async () => {
+      extractStatus.className = "status";
+      extractStatus.textContent = "";
+
+      if (!selectedFiles || selectedFiles.length === 0) {
+        extractStatus.textContent = "⚠️ Vui lòng chọn 1 file PDF để tách.";
+        extractStatus.classList.add("error");
+        return;
+      }
+      if (selectedFiles.length > 1) {
+        extractStatus.textContent = "⚠️ Hãy chỉ chọn 1 file khi tách trang (xoá, chọn lại).";
+        extractStatus.classList.add("error");
+        return;
+      }
+
+      const file = selectedFiles[0];
+
+      const from = parseInt(fromPageInput.value, 10);
+      const to = parseInt(toPageInput.value, 10);
+
+      if (isNaN(from) || isNaN(to) || from < 1 || to < 1 || from > to) {
+        extractStatus.textContent = "⚠️ Khoảng trang không hợp lệ. Ví dụ: từ 3 đến 10.";
+        extractStatus.classList.add("error");
+        return;
+      }
+
+      try {
+        extractStatus.textContent = "⏳ Đang tách trang, vui lòng chờ";
+        extractStatus.classList.add("loading");
+
+        const arrayBuffer = await readFileAsArrayBuffer(file);
+        const srcPdf = await PDFDocument.load(arrayBuffer);
+
+        const totalPages = srcPdf.getPageCount();
+        if (from > totalPages) {
+          extractStatus.className = "status error";
+          extractStatus.textContent =
+            "⚠️ File chỉ có " + totalPages + " trang. Không thể tách từ trang " + from + ".";
+          return;
+        }
+
+        const realTo = Math.min(to, totalPages);
+
+        const newPdf = await PDFDocument.create();
+        const pageIndices = [];
+        for (let i = from; i <= realTo; i++) {
+          pageIndices.push(i - 1); // index 0-based
+        }
+
+        const copied = await newPdf.copyPages(srcPdf, pageIndices);
+        copied.forEach(p => newPdf.addPage(p));
+
+        const newBytes = await newPdf.save();
+        const nameBase = file.name.replace(/\.pdf$/i, "");
+        const outName = nameBase + "_pages_" + from + "_to_" + realTo + ".pdf";
+        downloadBytes(newBytes, outName);
+
+        extractStatus.className = "status ok";
+        extractStatus.textContent =
+          "✅ Tách trang thành công! Đã xuất " +
+          pageIndices.length +
+          " trang (từ " +
+          from +
+          " đến " +
+          realTo +
+          ").";
+      } catch (err) {
+        console.error(err);
+        extractStatus.className = "status error";
+        extractStatus.textContent = "❌ Lỗi khi tách PDF: " + (err.message || err);
+      }
+    });
+  </script>
+</body>
+</html>
