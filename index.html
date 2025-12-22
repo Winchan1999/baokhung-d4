@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Báo Tường Điện Tử - Tiểu Đoàn 4</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- 1. THIẾT LẬP CHUNG --- */
+        :root {
+            --primary-blue: #0066cc;
+            --sky-light: #87CEFA;
+            --red-flag: #d90429;
+            --gold: #ffcc00;
+        }
+
+        body {
+    margin: 0; padding: 0;
+    font-family: 'Roboto', sans-serif;
+    
+    /* --- THAY ĐỔI Ở ĐÂY --- */
+    /* Thay đường dẫn 'background-sky.jpg' bằng tên file ảnh nền bạn đã tải lên */
+    background: url('background-sky.jpg') no-repeat center center fixed;
+    background-size: cover; /* Ảnh sẽ tự co giãn để phủ kín màn hình */
+    
+    color: #333; overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 100vh; display: flex; flex-direction: column;
+    padding-bottom: 150px;
+}
+
+        /* --- 2. HIỆU ỨNG MÁY BAY --- */
+        .plane-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: hidden; }
+        .paper-plane { position: absolute; opacity: 0; }
+        @keyframes fly {
+            0% { left: -20%; bottom: 10%; transform: rotate(15deg); opacity: 0; }
+            20% { opacity: 1; }
+            100% { left: 120%; bottom: 80%; transform: rotate(45deg); opacity: 0; }
+        }
+        .p1 { width: 700px; animation: fly 10s linear infinite; }
+        .p2 { width: 400px; animation: fly 15s linear infinite 4s; opacity: 0.5; }
+
+        /* --- 3. ẢNH NỔI (Fixed) --- */
+        .floating-icon { position: fixed; z-index: 999; animation: floating 3s ease-in-out infinite; transition: transform 0.3s; }
+        
+        .floating-left { left: 0; bottom: 0; pointer-events: none; z-index: 998; }
+        .floating-left img { height: 100vh; width: auto; display: block; }
+
+        .floating-right { right: 10px; bottom: 20px; width: 160px; animation-delay: 1.5s; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3)); cursor: pointer; }
+        .floating-right:hover { transform: scale(1.1); }
+        .floating-right img { width: 100%; height: auto; display: block; }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* --- 4. HEADER --- */
+        header { text-align: center; padding: 40px 10px 10px; position: relative; z-index: 10; }
+        .main-title h1 { font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: var(--red-flag); margin: 0; line-height: 1.1; text-shadow: 2px 2px 0px #fff, 4px 4px 0px var(--gold); }
+        .main-title p { color: #fff; font-size: 1rem; font-weight: 900; text-transform: uppercase; margin-top: 5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); padding: 0 10px; }
+
+        /* --- 5. SLIDER ẢNH TO (MỚI CẬP NHẬT) --- */
+        .activity-slider-section {
+            width: 100%;
+            /* Tăng khoảng cách để tách biệt hẳn so với phần dưới */
+            margin: 20px 0 40px 0; 
+            position: relative;
+            z-index: 5;
+            /* Tạo nền mờ nhẹ cho cả khu vực slide để làm nổi bật ảnh */
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(2px);
+            padding: 20px 0;
+            border-top: 1px solid rgba(255,255,255,0.3);
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .slider-title {
+            text-align: center; color: #fff; background: var(--red-flag); display: inline-block; padding: 8px 30px; border-radius: 30px; font-weight: bold; margin-bottom: 20px; box-shadow: 0 3px 5px rgba(0,0,0,0.2); position: relative; left: 50%; transform: translateX(-50%); font-size: 1.2rem;
+            z-index: 10;
+        }
+
+        .slider-track {
+            display: flex;
+            width: max-content;
+            /* Thời gian chạy lâu hơn (25s) vì ảnh to chạy nhanh sẽ chóng mặt */
+            animation: scroll 25s linear infinite; 
+            padding: 10px 0;
+            align-items: center; /* Căn giữa ảnh theo chiều dọc */
+        }
+        
+        .slider-track:hover { animation-play-state: paused; }
+
+        /* CẤU HÌNH ẢNH TO & VIỀN MỜ */
+        .slide-item {
+            width: 320px;  /* Chiều rộng ảnh lớn */
+            height: 220px; /* Chiều cao hình chữ nhật */
+            margin: 0 25px; /* Khoảng cách giữa các ảnh */
+            border-radius: 15px; /* Bo góc mềm mại, không tròn */
+            
+            /* HIỆU ỨNG VIỀN MỜ (GLOW) */
+            /* Bóng trắng lan tỏa ra ngoài tạo cảm giác viền mờ phát sáng */
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 
+                        inset 0 0 20px rgba(0,0,0,0.1); 
+            
+            overflow: hidden;
+            flex-shrink: 0;
+            transition: transform 0.3s, box-shadow 0.3s;
+            background: #fff; /* Nền trắng đỡ ảnh nếu ảnh chưa load kịp */
+        }
+
+        .slide-item:hover { 
+            transform: scale(1.05); /* Phóng to nhẹ khi di chuột */
+            box-shadow: 0 0 30px var(--gold); /* Đổi màu viền sang vàng khi hover */
+            z-index: 10;
+        }
+        
+        .slide-item img { width: 100%; height: 100%; object-fit: cover; }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* --- 6. NEWS GRID --- */
+        .container { width: 100%; padding: 15px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; position: relative; z-index: 5; }
+        .news-grid { display: grid; grid-template-columns: 1fr; gap: 20px; max-width: 1000px; margin: 0 auto; width: 100%; }
+        .news-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.15); position: relative; display: flex; flex-direction: row; height: 120px; transition: transform 0.2s; }
+        .news-card:active { transform: scale(0.98); }
+        .pin { position: absolute; top: 5px; left: 5px; width: 15px; height: 15px; background: var(--red-flag); border-radius: 50%; z-index: 5; box-shadow: 1px 1px 3px rgba(0,0,0,0.3); }
+        .card-img { width: 120px; height: 100%; object-fit: cover; }
+        .card-body { padding: 10px; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+        .card-body h3 { margin: 0 0 5px; color: var(--primary-blue); font-size: 1rem; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .card-body p { font-size: 0.8rem; color: #666; margin: 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+        /* --- 7. FOOTER --- */
+        footer { position: relative; width: 100%; height: 150px; margin-top: 20px; z-index: 1; }
+        .footer-bg { position: absolute; bottom: 0; width: 100%; height: 100%; background: url('https://placehold.co/800x300/png?text=ẢNH+BỘ+ĐỘI+HOA+HƯỚNG+DƯƠNG') no-repeat bottom center; background-size: cover; mask-image: linear-gradient(to top, black 80%, transparent 100%); -webkit-mask-image: linear-gradient(to top, black 80%, transparent 100%); }
+
+        /* RESPONSIVE */
+        @media (min-width: 768px) {
+            .main-title h1 { font-size: 6rem; }
+            .news-grid { grid-template-columns: repeat(3, 1fr); }
+            .news-card { flex-direction: column; height: auto; }
+            .card-img { width: 100%; height: 160px; }
+            footer { height: 300px; }
+            .floating-left { width: auto; left: 0; }
+            .floating-right { width: 300px; right: 30px; }
+            
+            /* Trên màn hình to thì ảnh slide to hơn nữa */
+            .slide-item { width: 400px; height: 260px; margin: 0 30px; }
+        }
+		/* --- 6. NEWS GRID (SỬA LẠI THÀNH DẠNG BÌA SÁCH) --- */
+.container { 
+    width: 100%; padding: 15px; box-sizing: border-box; 
+    display: flex; flex-direction: column; gap: 20px; 
+    position: relative; z-index: 5; 
+}
+
+.news-grid { 
+    display: grid; 
+    /* Trên máy tính để 3 cột là đẹp nhất cho 6 ô */
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 30px; /* Tăng khoảng cách ra cho thoáng */
+    max-width: 1000px; margin: 0 auto; width: 100%;
+}
+
+/* KHUNG BAO NGOÀI (Giờ chỉ là cái khung trong suốt giữ chỗ) */
+.news-card { 
+    background: transparent; /* Bỏ nền trắng */
+    box-shadow: none;        /* Bỏ bóng khung */
+    border-radius: 0; 
+    position: relative; 
+    display: block;          /* Xếp dọc bình thường */
+    height: auto;            /* Chiều cao tự do theo ảnh */
+    transition: transform 0.3s; 
+    cursor: pointer;
+}
+
+/* HIỆU ỨNG KHI DI CHUỘT VÀO BÌA */
+.news-card:hover { 
+    transform: translateY(-10px) scale(1.02); /* Bay lên và phóng to nhẹ */
+    z-index: 10;
+}
+
+/* CÁI ẢNH BÌA (QUAN TRỌNG NHẤT) */
+.card-img { 
+    width: 100%;      /* Rộng full ô */
+    height: auto;     /* Cao tự động theo tỉ lệ ảnh gốc */
+    aspect-ratio: 3/4; /* Ép tỉ lệ chuẩn bìa sách (dọc) */
+    object-fit: fill; /* Hiển thị trọn vẹn ảnh, không cắt xén */
+    
+    border-radius: 10px; /* Bo góc ảnh */
+    border: 3px solid #fff; /* Viền trắng bao quanh ảnh cho nổi */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4); /* Đổ bóng đậm cho giống sách thật */
+}
+
+/* ẨN PHẦN CHỮ BÊN DƯỚI (VÌ TRÊN ẢNH CÓ RỒI) */
+.card-body { 
+    display: none; 
+}
+
+/* CÁI GHIM GIẤY (Vẫn giữ lại để trang trí góc) */
+.pin { 
+    position: absolute; top: -10px; left: 50%; transform: translateX(-50%); 
+    width: 15px; height: 15px; background: var(--red-flag); 
+    border-radius: 50%; z-index: 5; box-shadow: 1px 1px 3px rgba(0,0,0,0.3); 
+    border: 2px solid #fff;
+}
+
+/* --- RESPONSIVE MOBILE (Điện thoại) --- */
+@media (max-width: 768px) {
+    .news-grid { 
+        /* Trên điện thoại chia 2 cột để nhìn rõ bìa sách */
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 15px;
+    }
+    .main-title h1 { font-size: 3.5rem; }
+    
+    /* Chỉnh lại slide cho mobile */
+    .slide-item { width: 250px; height: 160px; margin: 0 15px; }
+}
+    </style>
+</head>
+<body>
+	
+	
+
+    <div class="plane-container">
+        <img src="plane.png" class="paper-plane p1" alt="">
+        <img src="plane.png" class="paper-plane p2" alt="">
+    </div>
+
+    <div class="floating-icon floating-left">
+        <img src="but.png" alt="Logo Cay But">
+    </div>
+
+    <div class="floating-icon floating-right" onclick="alert('Mở trang Số báo đặc biệt!')">
+        <img src="sobaodacbiet.png" alt="So Bao Dac Biet">
+    </div>
+
+    <header>
+        <div class="main-title">
+            <h1>Tiếp Bước</h1>
+            <p>Tiểu Đoàn 4 - Trường SQCB</p>
+        </div>
+    </header>
+
+    <section class="activity-slider-section">
+        <div class="slider-title">HOẠT ĐỘNG TIÊU BIỂU</div>
+        
+        <div class="slider-track">
+            <div class="slide-item"><img src="1.jpg"></div>
+            <div class="slide-item"><img src="2.jpg"></div>
+            <div class="slide-item"><img src="3.jpg"></div>
+            <div class="slide-item"><img src="4.jpg"></div>
+            
+            <div class="slide-item"><img src="1.jpg"></div>
+            <div class="slide-item"><img src="2.jpg"></div>
+            <div class="slide-item"><img src="3.jpg"></div>
+            <div class="slide-item"><img src="4.jpg"></div>
+        </div>
+    </section>
+
+    <div class="container">
+        <main class="news-grid">
+            <article class="news-card"><div class="pin"></div><img src="xaluan.jpg" class="card-img"><div class="card-body"><h3>Xã luận</h3><p>   </p></div></article>
+            <article class="news-card"><div class="pin"></div><img src="dienhinh.jpg" class="card-img"><div class="card-body"><h3>ĐIển hình</h3><p>   </p></div></article>
+            <article class="news-card"><div class="pin"></div><img src="hoatdong.jpg" class="card-img"><div class="card-body"><h3>Hoạt động đơn vị</h3><p>   </p></div></article>
+            <article class="news-card"><div class="pin"></div><img src="sangtac.jpg" class="card-img"><div class="card-body"><h3>Sáng tác thơ ca</h3><p>   </p></div></article>
+            <article class="news-card"><div class="pin"></div><img src="camnghi.jpg" class="card-img"><div class="card-body"><h3>Bài cảm nghĩ</h3><p>    </p></div></article>
+            <article class="news-card"><div class="pin"></div><img src="truyencuoi.jpg" class="card-img"><div class="card-body"><h3>Truyện cười</h3><p>    </p></div></article>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-bg"></div>
+    </footer>
+
+</body>
+</html>

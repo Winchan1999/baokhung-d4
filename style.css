@@ -1,0 +1,162 @@
+/* Thiết lập chung */
+:root {
+    --primary-blue: #0077b6;
+    --sky-blue: #ade8f4;
+    --red-highlight: #d90429;
+    --yellow-gold: #ffb703;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(to bottom, #48cae4, #0077b6); /* Nền trời xanh */
+    color: #333;
+    overflow-x: hidden;
+}
+
+/* Header - Chữ Tiếp Bước */
+header {
+    position: relative;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-top: 20px;
+}
+
+.main-title h1 {
+    font-family: 'Dancing Script', cursive; /* Font chữ viết tay uốn lượn */
+    font-size: 5rem;
+    color: var(--red-highlight);
+    text-shadow: 2px 2px 0px #fff, 4px 4px 0px var(--yellow-gold);
+    margin: 0;
+}
+
+.main-title p {
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.badge-placeholder {
+    position: absolute;
+    top: 20px;
+    left: 5%;
+    width: 150px;
+    height: 150px;
+    background: #fff;
+    border-radius: 50%;
+    border: 5px solid var(--yellow-gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    /* Thực tế bạn sẽ dùng thẻ <img> tại đây */
+}
+
+/* Layout Chính */
+.content-container {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    gap: 30px;
+    position: relative;
+    z-index: 2; /* Nổi lên trên nền */
+}
+
+/* Lưới bài viết (Mô phỏng các ô xanh) */
+.news-grid {
+    flex: 3;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.news-card {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    border: 2px solid var(--sky-blue);
+    transition: transform 0.3s;
+}
+
+.news-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--yellow-gold);
+}
+
+.card-img {
+    height: 150px;
+    background-color: #eee;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.news-card h3 {
+    color: var(--primary-blue);
+    margin: 10px 0;
+}
+
+/* Sidebar bên phải (Dải lượn sóng) */
+.photo-stream {
+    flex: 1;
+    background: url('duong-luon-song-bg.png') no-repeat right top; /* Cần ảnh nền cong */
+    background-size: contain;
+    padding: 10px;
+}
+
+.photo-placeholder {
+    width: 100%;
+    height: 100px;
+    background: #fff;
+    margin-bottom: 10px;
+    border-radius: 50%; /* Bo tròn dạng bong bóng ảnh */
+    border: 3px solid #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Footer - Trang trí chân trang */
+footer {
+    position: relative;
+    margin-top: 50px;
+    background: linear-gradient(to top, #d90429, transparent 50%);
+    padding-bottom: 20px;
+}
+
+.soldiers-art {
+    height: 300px;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    color: #fff;
+    font-weight: bold;
+    font-size: 2rem;
+    /* Dùng background-image chứa hình chiến sĩ và hoa hướng dương */
+    background-image: url('URL_ANH_CHIEN_SI_HOA_HUONG_DUONG.png'); 
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.book-banner {
+    text-align: center;
+    color: #fff;
+    background: #d90429;
+    padding: 10px;
+    clip-path: polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%); /* Tạo hình vát chéo giống dải băng */
+    width: 60%;
+    margin: -30px auto 0; /* Đẩy lên đè lên hình chiến sĩ 1 chút */
+    position: relative;
+    z-index: 5;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
