@@ -222,6 +222,40 @@
     /* Chỉnh lại slide cho mobile */
     .slide-item { width: 250px; height: 160px; margin: 0 15px; }
 }
+/* --- SỬA LỖI HIỂN THỊ TRÊN ĐIỆN THOẠI --- */
+@media (max-width: 768px) {
+    /* 1. Thu nhỏ cây bút lại */
+    .floating-left img {
+        height: 50vh; /* Giảm từ 100vh xuống còn 50% màn hình thôi */
+        width: auto;
+        opacity: 0.8; /* Làm mờ đi chút xíu để dễ đọc chữ đè lên (nếu có) */
+    }
+    
+    /* Đẩy cây bút xuống thấp và sang trái một chút để không che nội dung */
+    .floating-left {
+        left: -20px; 
+        bottom: 0;
+    }
+
+    /* 2. Thu nhỏ cuốn sách bên phải */
+    .floating-right {
+        width: 100px; /* Giảm kích thước cuốn sách */
+        bottom: 10px;
+        right: 5px;
+    }
+
+    /* 3. Chỉnh lại tiêu đề cho đỡ bị cây bút che */
+    .main-title h1 {
+        font-size: 3rem; /* Chữ nhỏ lại xíu */
+    }
+    
+    /* 4. Đẩy phần nội dung (Slide và Tin tức) lùi sang phải một chút để tránh cây bút */
+    .activity-slider-section, 
+    .container {
+        padding-left: 10px; 
+        padding-right: 10px;
+    }
+}
     </style>
 </head>
 <body>
