@@ -256,6 +256,52 @@
         padding-right: 10px;
     }
 }
+		/* --- CSS CHO MODAL POPUP --- */
+.modal {
+    display: none; /* Mặc định ẩn */
+    position: fixed; 
+    z-index: 10000; /* Cao hơn tất cả mọi thứ (kể cả máy bay, logo) */
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: hidden; 
+    background-color: rgba(0,0,0,0.85); /* Nền đen mờ tối thui */
+    backdrop-filter: blur(5px); /* Làm mờ nền đằng sau */
+}
+
+.modal-content {
+    position: relative;
+    margin: 5% auto; /* Cách trên 5% */
+    width: 90%;      /* Rộng 90% màn hình */
+    height: 85%;     /* Cao 85% màn hình */
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    overflow: hidden;
+}
+
+.modal-content iframe {
+    width: 100%;
+    height: 100%;
+}
+
+/* Nút tắt X to đùng */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    z-index: 10001;
+}
+
+.close-btn:hover {
+    color: var(--red-flag);
+}
     </style>
 </head>
 <body>
@@ -300,19 +346,86 @@
 
     <div class="container">
         <main class="news-grid">
-            <article class="news-card"><div class="pin"></div><img src="xaluan.jpg" class="card-img"><div class="card-body"><h3>Xã luận</h3><p>   </p></div></article>
-            <article class="news-card"><div class="pin"></div><img src="dienhinh.jpg" class="card-img"><div class="card-body"><h3>ĐIển hình</h3><p>   </p></div></article>
-            <article class="news-card"><div class="pin"></div><img src="hoatdong.jpg" class="card-img"><div class="card-body"><h3>Hoạt động đơn vị</h3><p>   </p></div></article>
-            <article class="news-card"><div class="pin"></div><img src="sangtac.jpg" class="card-img"><div class="card-body"><h3>Sáng tác thơ ca</h3><p>   </p></div></article>
-            <article class="news-card"><div class="pin"></div><img src="camnghi.jpg" class="card-img"><div class="card-body"><h3>Bài cảm nghĩ</h3><p>    </p></div></article>
-            <article class="news-card"><div class="pin"></div><img src="truyencuoi.jpg" class="card-img"><div class="card-body"><h3>Truyện cười</h3><p>    </p></div></article>
-        </main>
+
+    <article class="news-card" onclick="openFlip('https://online.fliphtml5.com/tftib/cqwz/#p=2
+')">
+        <div class="pin"></div>
+        <img src="xaluan.jpg" class="card-img" alt="Xã luận">
+    </article>
+
+    <article class="news-card" onclick="openFlip('https://online.fliphtml5.com/tftib/yjeq/
+')">
+        <div class="pin"></div>
+        <img src="dienhinh.jpg" class="card-img" alt="Điển hình">
+    </article>
+
+    <article class="news-card" onclick="openFlip('https://online.fliphtml5.com/tftib/imnt/')">
+        <div class="pin"></div>
+        <img src="hoatdong.jpg" class="card-img" alt="Hoạt động">
+    </article>
+
+    <article class="news-card" onclick="openFlip('LINK_SACH_SANG_TAC_CUA_BAN_O_DAY')">
+        <div class="pin"></div>
+        <img src="sangtac.jpg" class="card-img" alt="Sáng tác">
+    </article>
+
+    <article class="news-card" onclick="openFlip('https://online.fliphtml5.com/tftib/pyqg/#p=1')">
+        <div class="pin"></div>
+        <img src="camnghi.jpg" class="card-img" alt="Cảm nghĩ">
+    </article>
+
+    <article class="news-card" onclick="openFlip('https://online.fliphtml5.com/tftib/wahj/
+')">
+        <div class="pin"></div>
+        <img src="truyencuoi.jpg" class="card-img" alt="Truyện cười">
+    </article>
+
+</main>
     </div>
 
     <footer>
         <div class="footer-bg"></div>
     </footer>
+<div id="flipModal" class="modal">
+    <span class="close-btn" onclick="closeFlip()">&times;</span>
+    
+    <div class="modal-content">
+        <iframe id="flipFrame" src="" frameborder="0" allowfullscreen></iframe>
+    </div>
+</div>
 
+<script>
+    // Hàm mở sách (Nhận link sách làm tham số)
+    function openFlip(url) {
+        var modal = document.getElementById("flipModal");
+        var frame = document.getElementById("flipFrame");
+        
+        // Gán link sách vào iframe
+        frame.src = url;
+        // Hiện modal lên
+        modal.style.display = "block";
+    }
+
+    // Hàm đóng sách
+    function closeFlip() {
+        var modal = document.getElementById("flipModal");
+        var frame = document.getElementById("flipFrame");
+        
+        // Ẩn modal
+        modal.style.display = "none";
+        // Xóa link để dừng tải (nhẹ máy)
+        frame.src = "";
+    }
+
+    // Bấm ra ngoài vùng sách thì tự đóng
+    window.onclick = function(event) {
+        var modal = document.getElementById("flipModal");
+        if (event.target == modal) {
+            closeFlip();
+        }
+    }
+</script>
 </body>
 </html>
+
 
